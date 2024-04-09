@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { map } from 'rxjs';
 
 @Component({
@@ -13,6 +14,9 @@ import { map } from 'rxjs';
         Vous pourrez alors gérer facilement vos factures en tant que Freelance !
       </p>
       <form [formGroup]="registerForm" (submit)="onSubmit()">
+        <div class="alert bg-warning" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
         <div>
           <label class="mb-1" for="name">Nom d'utilisateur</label>
           <input
@@ -94,7 +98,7 @@ import { map } from 'rxjs';
   ]
 })
 export class RegisterComponent implements OnInit {
-
+  errorMessage = '';
   registerForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email], [this.uniqeEmailAsyncValidator.bind(this)]),
     name: new FormControl('', [Validators.required, Validators.minLength(5)]),
@@ -105,10 +109,18 @@ export class RegisterComponent implements OnInit {
   })
 
   onSubmit() {
-    console.log(this.registerForm.value);
+
+    if (this.registerForm.invalid) {
+      return;
+    }
+    this.http.post('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/signup', this.registerForm.value)
+      .subscribe({
+        next: () => this.router.navigateByUrl('/'),
+        error: (error) => this.errorMessage = "Un problème est survenu, merci de réssayer plus tard"
+      })
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   uniqeEmailAsyncValidator(control: AbstractControl) {
     return this.http.post<{ exists: boolean }>('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/user/validation/exists', { email: control.value }).pipe(
