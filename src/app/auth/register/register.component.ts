@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -38,7 +40,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
             id="email"
             class="mb-3 form-control"
           />
-          <p class="invalid-feedback">L'adresse email doit être valide</p>
+          <p class="invalid-feedback" *ngIf="email.hasError('required') || email.hasError('email')">L'adresse email doit être valide</p>
+          <p class="text-info" *ngIf="email.pending">
+            <span class="spinner-boder spinner-boder-sm">Chargement ...</span>
+          </p>
+          <p class="invalid-feedback" *ngIf="email.hasError('uniqueEmail')">Cette adresse est déjà utilisée</p>
         </div>
         <div>
           <label class="mb-1" for="password">Mot de passe</label>
@@ -86,7 +92,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class RegisterComponent implements OnInit {
 
   registerForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email], [this.uniqeEmailAsyncValidator.bind(this)]),
     name: new FormControl('', [Validators.required, Validators.minLength(5)]),
     password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern(/\d+/)]),
     confirmPassword: new FormControl('', Validators.required)
@@ -96,7 +102,14 @@ export class RegisterComponent implements OnInit {
     console.log(this.registerForm.value);
   }
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+
+  uniqeEmailAsyncValidator(control: AbstractControl) {
+    return this.http.post<{ exists: boolean }>('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/user/validation/exists', { email: control.value }).pipe(
+      map(apiResponse => apiResponse.exists),
+      map(exists => exists ? { uniqueEmail: true } : null)
+    );
+  }
 
   ngOnInit(): void {
   }
