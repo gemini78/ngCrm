@@ -22,14 +22,17 @@ import { Router } from '@angular/router';
       </button>
       <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item" *ngIf="isAuthenticated$ | async">
-            <a class="nav-link" routerLink="/invoices">Factures</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="/invoices/create">+ Créer</a>
-          </li>
+          <ng-container *authenticated="true">
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/invoices">Factures</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/invoices/create">+ Créer</a>
+            </li>
+          </ng-container>
         </ul>
         <ul class="navbar-nav">
+          <ng-container *authenticated="false">
           <li class="nav-item">
             <a
               id="login"
@@ -46,7 +49,9 @@ import { Router } from '@angular/router';
               >Inscription</a
             >
           </li>
-          <li class="nav-item">
+          </ng-container>
+         
+          <li class="nav-item" *authenticated="true">
             <button (click)="onLogout()" id="logout" class="btn btn-danger btn-sm">
               Déconnexion
             </button>
@@ -62,16 +67,10 @@ import { Router } from '@angular/router';
   styles: []
 })
 export class AppComponent {
-  isAuthenticated$!: Observable<boolean>
-
   constructor(private auth: AuthService, private router: Router) { }
 
   onLogout() {
     this.auth.logout();
     this.router.navigateByUrl('/account/login')
-  }
-
-  ngOnInit() {
-    this.isAuthenticated$ = this.auth.authStatus$;
   }
 }
