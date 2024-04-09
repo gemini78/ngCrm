@@ -57,8 +57,8 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
 
   loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(5), Validators.pattern(/\d+/)]]
+    email: ['jd@gmail.com', [Validators.required, Validators.email]],
+    password: ['passw0rd', [Validators.required, Validators.minLength(5), Validators.pattern(/\d+/)]]
   })
 
   constructor(private auth: AuthService, private router: Router, private fb: FormBuilder) { }

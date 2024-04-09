@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, map, tap } from "rxjs";
+import { TokenManagerService } from "./token-manager.service";
 
 export type TRegisterData = {
     email: string;
@@ -20,8 +21,13 @@ export type TLoginApiResponse = {
 @Injectable()
 export class AuthService {
     authStatus$ = new BehaviorSubject(false);
-    authToken: string | null = null;
-    constructor(private http: HttpClient) { }
+
+    constructor(private http: HttpClient, private tokenManager: TokenManagerService) {
+        const token = this.tokenManager.loadToken();
+        if (token) {
+            this.authStatus$.next(true);
+        }
+    }
 
     register(registerData: TRegisterData) {
         return this.http.post('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/signup', registerData)
@@ -36,15 +42,19 @@ export class AuthService {
         return this.http.post<TLoginApiResponse>('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/login', loginData).pipe(
             map(apiResponse => apiResponse.authToken),
             tap(token => {
-                this.authToken = token;
+                this.tokenManager.storeToken(token);
                 this.authStatus$.next(true);
             })
         )
     }
 
     logout() {
-        this.authToken = null;
+        this.tokenManager.removeToken()
         this.authStatus$.next(false);
+    }
+
+    get authToken() {
+        return this.tokenManager.loadToken();
     }
 
 }

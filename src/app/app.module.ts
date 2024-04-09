@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { AuthService } from './auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
+import { TokenManagerService } from './auth/token-manager.service';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,7 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     SharedModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, TokenManagerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
