@@ -1,7 +1,8 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Inject, Injectable, InjectionToken, inject } from "@angular/core";
 import { BehaviorSubject, map, tap } from "rxjs";
-import { TokenManagerService } from "./token-manager.service";
+import { LocalStorageTokenManagerService } from "./token-manager.service";
+import { ITokenManager } from "./token-manager";
 
 export type TRegisterData = {
     email: string;
@@ -18,15 +19,18 @@ export type TLoginApiResponse = {
     authToken: string
 };
 
+export const TOKEN_MANAGER = new InjectionToken('the class to inject to store the token');
+
 @Injectable()
 export class AuthService {
     authStatus$ = new BehaviorSubject(false);
 
-    constructor(private http: HttpClient, private tokenManager: TokenManagerService) {
-        const token = this.tokenManager.loadToken();
-        if (token) {
-            this.authStatus$.next(true);
-        }
+    constructor(private http: HttpClient, @Inject(TOKEN_MANAGER) private tokenManager: ITokenManager) {
+        this.tokenManager.loadToken().subscribe(token => {
+            if (token) {
+                this.authStatus$.next(true);
+            }
+        })
     }
 
     register(registerData: TRegisterData) {
