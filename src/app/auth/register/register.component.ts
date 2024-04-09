@@ -8,7 +8,6 @@ import { AuthService, TRegisterData } from '../auth.service';
   selector: 'app-register',
   template: `
   <div class="bg-light rounded p-3">
-      <pre>{{registerForm.value | json }}</pre>
       <h1>Créer un compte sur NgCRM !</h1>
       <p>
         Vous pourrez alors gérer facilement vos factures en tant que Freelance !

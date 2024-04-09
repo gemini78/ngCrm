@@ -8,6 +8,11 @@ export type TRegisterData = {
     password: string;
 }
 
+export type TLoginData = {
+    email: string;
+    password: string;
+}
+
 @Injectable()
 export class AuthService {
     constructor(private http: HttpClient) { }
@@ -19,6 +24,10 @@ export class AuthService {
     exists(email: string) {
         return this.http.post<{ exists: boolean }>('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/user/validation/exists',
             { email }).pipe(map(apiResponse => apiResponse.exists));
+    }
+
+    login(loginData: TLoginData) {
+        return this.http.post('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/login', loginData)
     }
 
 }
