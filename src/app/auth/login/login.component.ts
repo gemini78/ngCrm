@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
   template: `
   <div class="bg-light rounded p-3">
       <h1>Connexion à NgCRM !</h1>
-      <pre>{{loginForm.value | json }}</pre>
       <form [formGroup]="loginForm" (submit)="onSubmit()">
         <div class="alert bg-warning" *ngIf="errorMessage">
           {{ errorMessage }}

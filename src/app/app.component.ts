@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { AuthService } from './auth/auth.service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +22,7 @@ import { Component } from '@angular/core';
       </button>
       <div class="collapse navbar-collapse" id="navbarColor01">
         <ul class="navbar-nav me-auto">
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="isAuthenticated$ | async">
             <a class="nav-link" routerLink="/invoices">Factures</a>
           </li>
           <li class="nav-item">
@@ -44,7 +47,7 @@ import { Component } from '@angular/core';
             >
           </li>
           <li class="nav-item">
-            <button id="logout" class="btn btn-danger btn-sm">
+            <button (click)="onLogout()" id="logout" class="btn btn-danger btn-sm">
               Déconnexion
             </button>
           </li>
@@ -59,5 +62,16 @@ import { Component } from '@angular/core';
   styles: []
 })
 export class AppComponent {
-  title = 'ngCrm';
+  isAuthenticated$!: Observable<boolean>
+
+  constructor(private auth: AuthService, private router: Router) { }
+
+  onLogout() {
+    this.auth.logout();
+    this.router.navigateByUrl('/account/login')
+  }
+
+  ngOnInit() {
+    this.isAuthenticated$ = this.auth.authStatus$;
+  }
 }
