@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { map } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   template: `
   <div class="bg-light rounded p-3">
+      <pre>{{registerForm.value | json }}</pre>
       <h1>Créer un compte sur NgCRM !</h1>
       <p>
         Vous pourrez alors gérer facilement vos factures en tant que Freelance !
@@ -69,7 +70,7 @@ import { map } from 'rxjs';
           <input
             autocomplete=off
             formControlName="confirmPassword"
-            [class.is-invalid]="confirmPassword.invalid && confirmPassword.touched"
+            [class.is-invalid]="(confirmPassword.invalid || registerForm.hasError('confirm')) && confirmPassword.touched"
             [class.is-valid]="confirmPassword.valid && confirmPassword.touched"
             type="password"
             placeholder="Confirmez votre mot de passe"
@@ -78,7 +79,10 @@ import { map } from 'rxjs';
             class="mb-3 form-control"
           />
 
-          <p class="invalid-feedback">
+          <p class="invalid-feedback" *ngIf="confirmPassword.hasError('required')">
+            La confirmation du mot de passe est obligatoire
+          </p>
+          <p class="invalid-feedback" *ngIf="registerForm.hasError('confirm') && !confirmPassword.hasError('required')">
             La confirmation ne correspond pas au mot de passe
           </p>
         </div>
@@ -96,6 +100,8 @@ export class RegisterComponent implements OnInit {
     name: new FormControl('', [Validators.required, Validators.minLength(5)]),
     password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern(/\d+/)]),
     confirmPassword: new FormControl('', Validators.required)
+  }, {
+    validators: confirmPasswordValidator
   })
 
   onSubmit() {
@@ -118,4 +124,15 @@ export class RegisterComponent implements OnInit {
   get email() { return this.registerForm.controls.email; }
   get password() { return this.registerForm.controls.password; }
   get confirmPassword() { return this.registerForm.controls.confirmPassword; }
+}
+
+const confirmPasswordValidator: ValidatorFn = (control: AbstractControl) => {
+  const password = control.get('password');
+  const confirmPassword = control.get('confirmPassword');
+  if (password?.value === confirmPassword?.value) {
+    return null;
+  }
+  return {
+    confirm: true
+  };
 }
