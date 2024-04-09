@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService, TLoginData } from '../auth.service';
 import { Router } from '@angular/router';
 
@@ -57,12 +57,12 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   errorMessage = '';
 
-  loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern(/\d+/)])
+  loginForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(5), Validators.pattern(/\d+/)]]
   })
 
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private auth: AuthService, private router: Router, private fb: FormBuilder) { }
 
   ngOnInit(): void {
   }

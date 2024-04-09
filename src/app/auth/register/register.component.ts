@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
 import { AuthService, TRegisterData } from '../auth.service';
@@ -98,11 +98,11 @@ import { AuthService, TRegisterData } from '../auth.service';
 })
 export class RegisterComponent implements OnInit {
   errorMessage = '';
-  registerForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email], [this.uniqeEmailAsyncValidator.bind(this)]),
-    name: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.pattern(/\d+/)]),
-    confirmPassword: new FormControl('', Validators.required)
+  registerForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email], [this.uniqeEmailAsyncValidator.bind(this)]],
+    name: ['', [Validators.required, Validators.minLength(5)]],
+    password: ['', [Validators.required, Validators.minLength(5), Validators.pattern(/\d+/)]],
+    confirmPassword: ['', Validators.required]
   }, {
     validators: confirmPasswordValidator
   })
@@ -126,7 +126,7 @@ export class RegisterComponent implements OnInit {
       })
   }
 
-  constructor(private router: Router, private auth: AuthService) { }
+  constructor(private router: Router, private auth: AuthService, private fb: FormBuilder) { }
 
   uniqeEmailAsyncValidator(control: AbstractControl) {
     return this.auth.exists(control.value).pipe(
