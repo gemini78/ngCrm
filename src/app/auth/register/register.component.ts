@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
+import { AuthService, TRegisterData } from '../auth.service';
 
 @Component({
   selector: 'app-register',
@@ -113,18 +113,24 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-    this.http.post('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/signup', this.registerForm.value)
+
+    const data: TRegisterData = {
+      name: this.name.value!,
+      email: this.email.value!,
+      password: this.password.value!,
+    }
+
+    this.auth.register(data)
       .subscribe({
         next: () => this.router.navigateByUrl('/'),
         error: (error) => this.errorMessage = "Un problème est survenu, merci de réssayer plus tard"
       })
   }
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private router: Router, private auth: AuthService) { }
 
   uniqeEmailAsyncValidator(control: AbstractControl) {
-    return this.http.post<{ exists: boolean }>('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/user/validation/exists', { email: control.value }).pipe(
-      map(apiResponse => apiResponse.exists),
+    return this.auth.exists(control.value).pipe(
       map(exists => exists ? { uniqueEmail: true } : null)
     );
   }
