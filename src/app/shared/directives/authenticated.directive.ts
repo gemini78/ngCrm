@@ -5,7 +5,7 @@ import { AuthService } from "src/app/auth/auth.service";
 @Directive({
     selector: "[authenticated]"
 })
-export class AuthenticatedDiective {
+export class AuthenticatedDirective {
 
     @Input('authenticated')
     value = true;

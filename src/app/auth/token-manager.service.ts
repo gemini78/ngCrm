@@ -1,5 +1,6 @@
 import { Observable, of } from "rxjs";
 import { ITokenManager } from "./token-manager";
+import { Injectable } from "@angular/core";
 
 export class SessionStorageTokenManagerService implements ITokenManager {
     storeToken(token: string) {

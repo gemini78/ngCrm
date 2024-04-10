@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { map } from 'rxjs';
 import { AuthService, TRegisterData } from '../auth.service';
@@ -122,7 +122,7 @@ export class RegisterComponent implements OnInit {
     this.auth.register(data)
       .subscribe({
         next: () => this.router.navigateByUrl('/'),
-        error: (error) => this.errorMessage = "Un problème est survenu, merci de réssayer plus tard"
+        error: () => this.errorMessage = "Un problème est survenu, merci de réssayer plus tard"
       })
   }
 

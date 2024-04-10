@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthenticatedDiective } from './directives/authenticated.directive';
+import { AuthenticatedDirective } from './directives/authenticated.directive';
 
 
 
 @NgModule({
-  declarations: [AuthenticatedDiective],
+  declarations: [AuthenticatedDirective],
   imports: [
     CommonModule
   ],
-  exports: [AuthenticatedDiective]
+  exports: [AuthenticatedDirective]
 })
 export class SharedModule { }
