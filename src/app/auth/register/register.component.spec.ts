@@ -96,50 +96,36 @@ describe('RegisterComponent', () => {
     })
 
     it("should not call authService.register if form is invalid ", () => {
-        component.registerForm.setValue({
+        component.registerForm.patchValue({
             email: 'batman',
             password: '',
             confirmPassword: '',
             name: ''
         })
-
         let spyRegister = spyOn(service, "register");
-
-        let button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
-        //existing
-        expect(button).toBeDefined();
-
-        button.click();
+        component.onSubmit()
         expect(spyRegister).not.toHaveBeenCalled();
     })
 
     it("should redirect to / if register succeed ", () => {
 
-        let button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
-        //existing
-        expect(button).toBeDefined();
-
-        component.registerForm.setValue({
+        component.registerForm.patchValue({
             email: 'jd@gmail.com',
             password: 'passw0rd',
             confirmPassword: 'passw0rd',
             name: 'John Doe'
         });
 
-
         let spyRegister = spyOn(service, "register");
         spyRegister.and.returnValue(of({}));
 
         let spyNavigate = spyOn(router, 'navigateByUrl');
 
-        button.click();
+        component.onSubmit()
         expect(spyNavigate).toHaveBeenCalledWith('/')
     })
 
-    it("should not redirect  and show an error", () => {
-        let button: HTMLButtonElement = fixture.nativeElement.querySelector('button');
-        //existing
-        expect(button).toBeDefined();
+    it("should not redirect and show an error", () => {
 
         component.registerForm.setValue({
             email: 'jd@gmail.com',
@@ -154,7 +140,7 @@ describe('RegisterComponent', () => {
 
         let spyNavigate = spyOn(router, 'navigateByUrl');
 
-        button.click();
+        component.onSubmit()
         expect(spyNavigate).not.toHaveBeenCalled();
 
         // alert exist

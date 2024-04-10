@@ -12,7 +12,7 @@ import { AuthService, TRegisterData } from '../auth.service';
       <p>
         Vous pourrez alors gérer facilement vos factures en tant que Freelance !
       </p>
-      <form [formGroup]="registerForm" (submit)="onSubmit()">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="alert bg-warning" *ngIf="errorMessage">
           {{ errorMessage }}
         </div>
@@ -89,7 +89,7 @@ import { AuthService, TRegisterData } from '../auth.service';
             La confirmation ne correspond pas au mot de passe
           </p>
         </div>
-        <button class="btn btn-success">Créer mon compte NgCRM !</button>
+        <button id="js-btn-create-user" class="btn btn-success">Créer mon compte NgCRM !</button>
       </form>
     </div>
   `,

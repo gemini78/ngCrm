@@ -57,8 +57,8 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
 
   loginForm = this.fb.group({
-    email: ['jd@gmail.com', [Validators.required, Validators.email]],
-    password: ['passw0rd', [Validators.required, Validators.minLength(5), Validators.pattern(/\d+/)]]
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(5), Validators.pattern(/\d+/)]]
   })
 
   constructor(private auth: AuthService, private router: Router, private fb: FormBuilder) { }
@@ -78,7 +78,11 @@ export class LoginComponent implements OnInit {
 
     this.auth.login(loginData).subscribe({
       next: () => this.router.navigateByUrl('/'),
-      error: (error) => this.errorMessage = error.error.message
+      error: (error) => {
+        console.log(error);
+
+        this.errorMessage = error.error.message;
+      }
     })
   }
 
