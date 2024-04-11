@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { AuthService, TOKEN_MANAGER } from './auth/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
-import { LocalStorageTokenManagerService } from './auth/token-manager.service';
+import { LocalStorageTokenManagerService } from './token-manager.service';
 
 @NgModule({
   declarations: [

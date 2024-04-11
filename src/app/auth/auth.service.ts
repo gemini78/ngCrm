@@ -1,8 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable, InjectionToken, inject } from "@angular/core";
 import { BehaviorSubject, map, tap } from "rxjs";
-import { LocalStorageTokenManagerService } from "./token-manager.service";
-import { ITokenManager } from "./token-manager";
+import { ITokenManager } from "../token-manager";
 
 export type TRegisterData = {
     email: string;

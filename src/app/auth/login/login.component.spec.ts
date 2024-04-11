@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from "@angular/forms";
 import { AuthService, TOKEN_MANAGER } from "../auth.service";
 import { HttpClientTestingModule } from "@angular/common/http/testing"
-import { LocalStorageTokenManagerService } from "../token-manager.service";
+import { LocalStorageTokenManagerService } from "../../token-manager.service";
 import { CommonModule } from "@angular/common";
 import { SharedModule } from "src/app/shared/shared.module";
 import { Router } from "@angular/router";
