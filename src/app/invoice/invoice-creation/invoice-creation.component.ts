@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-invoice-creation',
@@ -10,33 +11,39 @@ import { Component, OnInit } from '@angular/core';
     votre liste plus tard !
   </p>
 
-  <form>
+  <form [formGroup]="invoiceForm" (submit)="onSubmit()">
     <div class="row">
       <div class="col">
         <label for="description">Description</label>
         <input
+          formControlName="description"
+          [class.is-invalid]="description.touched && description.invalid" 
+          [class.is-valid]="description.touched && description.valid" 
           type="text"
           id="description"
           name="description"
           placeholder="Description de la facture"
           class="form-control mb-3"
         />
-        <p class="invalid-feedback">La description est obligatoire !</p>
+        <p class="invalid-feedback">La description est obligatoire et doit faire au moins 10 caracteres!!</p>
       </div>
       <div class="col">
         <label for="customer_name">Client</label>
         <input
+          formControlName="customer_name"
+          [class.is-invalid]= "customerName.touched && customerName.invalid"
+          [class.is-valid]= "customerName.touched && customerName.valid"
           type="text"
           id="customer_name"
           name="customer_name"
           placeholder="Nom du client / la société"
           class="form-control mb-3"
         />
-        <p class="invalid-feedback">Le client est obligatoire !</p>
+        <p class="invalid-feedback">Le client est obligatoire et doit faire au moins 5 caracteres!</p>
       </div>
       <div class="col">
         <label for="status">Statut</label>
-        <select name="status" id="status" class="form-control mb-3">
+        <select formControlName="status" name="status" id="status" class="form-control mb-3">
           <option value="SENT">Envoyée</option>
           <option value="PAID">Payée</option>
           <option value="CANCELED">Annulée</option>
@@ -122,9 +129,40 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InvoiceCreationComponent implements OnInit {
 
-  constructor() { }
+  invoiceForm = this.fb.group({
+    customer_name: ['', [Validators.required, Validators.minLength(5)]],
+    description: ['', [Validators.required, Validators.minLength(10)]],
+    status: ['SEND'],
+    details: this.fb.array<FormGroup>([
+      this.fb.group({
+        description: ['', [Validators.required, Validators.minLength(5)]],
+        amount: ['', [Validators.required, Validators.min(0)]],
+        quantity: ['', [Validators.required, Validators.min(0)]],
+      })
+    ])
+  })
+
+  onSubmit() {
+    console.log(this.invoiceForm.value);
+  }
+
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
   }
+  get customerName() {
+    return this.invoiceForm.controls.customer_name;
+  }
 
+  get description() {
+    return this.invoiceForm.controls.description;
+  }
+
+  get status() {
+    return this.invoiceForm.controls.status;
+  }
+
+  get details() {
+    return this.invoiceForm.controls.details;
+  }
 }
