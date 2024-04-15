@@ -143,4 +143,51 @@ describe("AutService", () => {
         })
 
     })
+
+    it("should register new account", (done: DoneFn) => {
+        const httpController = TestBed.inject(HttpTestingController);
+        service = TestBed.inject(AuthService);
+        service.register({
+            email: 'mock@mail.com',
+            password: 'passw0rd',
+            name: 'MOCK_NAME'
+        }).subscribe(() => {
+            done();
+        });
+
+        const request = httpController
+            .expectOne({
+                method: 'POST',
+                url: 'https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/signup'
+            });
+
+        expect(request.request.body).toEqual({
+            email: 'mock@mail.com',
+            password: 'passw0rd',
+            name: 'MOCK_NAME',
+        })
+
+        request.flush({})
+    })
+
+    it("should verify if a mail already exist", (done: DoneFn) => {
+        const httpController = TestBed.inject(HttpTestingController);
+        service = TestBed.inject(AuthService);
+        service.exists('mock@mail.com').subscribe((exists) => {
+            expect(exists).toBeTrue();
+            done();
+        })
+
+        const request = httpController
+            .expectOne({
+                method: 'POST',
+                url: 'https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/user/validation/exists'
+            });
+
+        expect(request.request.body).toEqual({ email: 'mock@mail.com' })
+
+        request.flush({
+            exists: true,
+        })
+    })
 })
