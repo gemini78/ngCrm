@@ -7,6 +7,9 @@ import { Observable, catchError, combineLatest, of, skip } from "rxjs"
 import { Router } from "@angular/router"
 import { LoginComponent } from "./login/login.component"
 import { ReactiveFormsModule } from "@angular/forms"
+import { environment } from "src/environments/environment"
+
+const API_URL = environment.apiUrl;
 
 let service: AuthService;
 let storedToken: string | null = null;
@@ -42,8 +45,6 @@ describe("AutService", () => {
     })
 
     it("should set authStatus$ to TRUE if token is stored", (done: DoneFn) => {
-        /* const http = TestBed.inject(HttpClient);
-        const httpController = TestBed.inject(HttpTestingController); */
         storedToken = 'MOCK_TOKEN';
         service = TestBed.inject(AuthService);
 
@@ -98,7 +99,7 @@ describe("AutService", () => {
         })
 
         const request = httpController
-            .expectOne('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/login');
+            .expectOne(API_URL + '/auth/login');
 
         request.flush({
             authToken: 'MOCK_TOKEN'
@@ -133,7 +134,7 @@ describe("AutService", () => {
         })
 
         const request = httpController
-            .expectOne('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/login');
+            .expectOne(API_URL + '/auth/login');
 
         request.flush({
             message: 'MOCK_ERROR_MESSAGE'
@@ -158,7 +159,7 @@ describe("AutService", () => {
         const request = httpController
             .expectOne({
                 method: 'POST',
-                url: 'https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/signup'
+                url: API_URL + '/auth/signup'
             });
 
         expect(request.request.body).toEqual({
@@ -181,7 +182,7 @@ describe("AutService", () => {
         const request = httpController
             .expectOne({
                 method: 'POST',
-                url: 'https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/user/validation/exists'
+                url: API_URL + '/user/validation/exists'
             });
 
         expect(request.request.body).toEqual({ email: 'mock@mail.com' })

@@ -2,6 +2,9 @@ import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable, InjectionToken, inject } from "@angular/core";
 import { BehaviorSubject, map, tap } from "rxjs";
 import { ITokenManager } from "../token-manager";
+import { environment } from "src/environments/environment";
+
+const API_URL = environment.apiUrl;
 
 export type TRegisterData = {
     email: string;
@@ -33,16 +36,16 @@ export class AuthService {
     }
 
     register(registerData: TRegisterData) {
-        return this.http.post('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/signup', registerData)
+        return this.http.post(API_URL + '/auth/signup', registerData)
     }
 
     exists(email: string) {
-        return this.http.post<{ exists: boolean }>('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/user/validation/exists',
+        return this.http.post<{ exists: boolean }>(API_URL + '/user/validation/exists',
             { email }).pipe(map(apiResponse => apiResponse.exists));
     }
 
     login(loginData: TLoginData) {
-        return this.http.post<TLoginApiResponse>('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/login', loginData).pipe(
+        return this.http.post<TLoginApiResponse>(API_URL + '/auth/login', loginData).pipe(
             map(apiResponse => apiResponse.authToken),
             tap(token => {
                 this.tokenManager.storeToken(token);
