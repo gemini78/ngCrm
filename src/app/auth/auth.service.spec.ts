@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { AuthService, TOKEN_MANAGER } from "./auth.service"
 
 import { ITokenManager } from "../token-manager"
-import { Observable, combineLatest, of, skip } from "rxjs"
+import { Observable, catchError, combineLatest, of, skip } from "rxjs"
 import { Router } from "@angular/router"
 import { LoginComponent } from "./login/login.component"
 import { ReactiveFormsModule } from "@angular/forms"
@@ -102,6 +102,44 @@ describe("AutService", () => {
 
         request.flush({
             authToken: 'MOCK_TOKEN'
+        })
+
+    })
+
+    it("should not store token and set authStatus$ to FALSE if login() fails", (done: DoneFn) => {
+        const http = TestBed.inject(HttpClientTestingModule);
+        const httpController = TestBed.inject(HttpTestingController);
+
+        fixture = TestBed.createComponent(LoginComponent);
+        component = fixture.componentInstance;
+        router = TestBed.inject(Router);
+
+
+        service = TestBed.inject(AuthService);
+        const login$ = service.login({
+            email: 'john.doe@gmail.com',
+            password: 'passw0rd'
+        }).pipe(catchError(() => of('error')));
+
+        const authStatus$ = service.authStatus$;
+
+        combineLatest([login$, authStatus$]).subscribe({
+            next: ([token, status]) => {
+                expect(token).toBe('error')
+                expect(status).toBeFalse();
+                expect(storedToken).toBeNull();
+                done();
+            }
+        })
+
+        const request = httpController
+            .expectOne('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/auth/login');
+
+        request.flush({
+            message: 'MOCK_ERROR_MESSAGE'
+        }, {
+            status: 401,
+            statusText: 'Forbidden'
         })
 
     })
