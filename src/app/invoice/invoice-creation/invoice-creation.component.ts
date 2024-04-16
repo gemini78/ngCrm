@@ -122,16 +122,16 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
     <div class="row">
       <div class="col-6 text-end">Total HT :</div>
-      <div class="col" id="total_ht">{{ total }} €</div>
+      <div class="col" id="total_ht">{{ total | currency: 'EUR':'symbol':undefined: 'fr'}}</div>
     </div>
 
     <div class="row">
       <div class="col-6 text-end">Total TVA :</div>
-      <div class="col" id="total_tva">{{ totalTVA}} €</div>
+      <div class="col" id="total_tva">{{ totalTVA | currency: 'EUR':'symbol':undefined: 'fr'}}</div>
     </div>
     <div class="row fw-bold">
       <div class="col-6 text-end">Total TTC :</div>
-      <div class="col" id="total_ttc">{{ totalTTC }} €</div>
+      <div class="col" id="total_ttc">{{ totalTTC | currency: 'EUR':'symbol':undefined: 'fr'}}</div>
     </div>
 
     <button class="mt-3 w-sm-auto btn btn-success" id="submit">
