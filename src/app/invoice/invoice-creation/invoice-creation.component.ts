@@ -122,16 +122,16 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
     <div class="row">
       <div class="col-6 text-end">Total HT :</div>
-      <div class="col" id="total_ht">1 800,00 €</div>
+      <div class="col" id="total_ht">{{ total }} €</div>
     </div>
 
     <div class="row">
       <div class="col-6 text-end">Total TVA :</div>
-      <div class="col" id="total_tva">200,00 €</div>
+      <div class="col" id="total_tva">{{ totalTVA}} €</div>
     </div>
     <div class="row fw-bold">
       <div class="col-6 text-end">Total TTC :</div>
-      <div class="col" id="total_ttc">2 000,00 €</div>
+      <div class="col" id="total_ttc">{{ totalTTC }} €</div>
     </div>
 
     <button class="mt-3 w-sm-auto btn btn-success" id="submit">
@@ -153,13 +153,7 @@ export class InvoiceCreationComponent implements OnInit {
       description: FormControl,
       amount: FormControl,
       quantity: FormControl
-    }>>([
-      this.fb.group({
-        description: ['Test', [Validators.required, Validators.minLength(5)]],
-        amount: [4500, [Validators.required, Validators.min(0)]],
-        quantity: [8, [Validators.required, Validators.min(0)]],
-      })
-    ])
+    }>>([])
   })
 
   onAddDetails() {
@@ -182,6 +176,21 @@ export class InvoiceCreationComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  get total(): number {
+    return this.details.value.reduce((itemTotal: number, item) => {
+      return itemTotal + (item.amount * item.quantity);
+    }, 0)
+  }
+
+  get totalTVA(): number {
+    return this.total * 0.2;
+  }
+
+  get totalTTC(): number {
+    return (this.total + this.totalTVA);
+  }
+
   get customerName() {
     return this.invoiceForm.controls.customer_name;
   }
