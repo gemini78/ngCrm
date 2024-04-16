@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-invoice-creation',
@@ -54,17 +54,22 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
     <hr />
 
     <h3>Détails de la facture</h3>
-    <div class="alert bg-warning text-white">
+    <div class="alert bg-warning text-white" *ngIf="details.length===0">
       <p>Vous devez ajouter des détails à votre facture</p>
-      <button class="btn btn-sm btn-outline-light">
+      <button class="btn btn-sm btn-outline-light" (click)="onAddDetails()">
         + Ajouter ma première ligne
       </button>
     </div>
-    <section>
-      <div class="detail-row">
+    <section formArrayName="details">
+      <div class="detail-row" *ngFor="let group of details.controls; let i = index" [formGroup]="group">
         <div class="row mb-3">
           <div class="col-7">
             <input
+              formControlName="description"
+              [class.is-invalid]="group.controls.description.touched && group.controls.description.invalid"
+              [class.is-valid]="group.controls.description.touched && group.controls.description.valid"
+              name="decription_{{i}}"
+              id="decription_{{i}}"
               type="text"
               placeholder="Description"
               class="form-control"
@@ -73,6 +78,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           </div>
           <div class="col-2">
             <input
+              formControlName="amount"
+              [class.is-invalid]="group.controls.amount.touched && group.controls.amount.invalid"
+              [class.is-valid]="group.controls.amount.touched && group.controls.amount.valid"
+              name="amount_{{i}}"
+              id="amount_{{i}}"
               type="number"
               placeholder="Montant"
               class="form-control"
@@ -81,6 +91,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
           </div>
           <div class="col-2">
             <input
+              formControlName="quantity"
+              [class.is-invalid]="group.controls.quantity.touched && group.controls.quantity.invalid"
+              [class.is-valid]="group.controls.quantity.touched && group.controls.quantity.valid"
+              name="quantity_{{i}}"
+              id="quantity_{{i}}"
               type="number"
               placeholder="Quantité"
               class="form-control"
@@ -91,13 +106,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
             <button
               type="button"
               class="btn w-auto d-block btn-sm btn-danger"
+              (click)="onRemoveDetails(i)"
             >
               X
             </button>
           </div>
         </div>
       </div>
-      <button class="btn btn-primary btn-sm" type="button">
+      <button *ngIf="details.length > 0" class="btn btn-primary btn-sm" type="button" (click)="onAddDetails()">
         + Ajouter une ligne
       </button>
     </section>
@@ -133,14 +149,30 @@ export class InvoiceCreationComponent implements OnInit {
     customer_name: ['', [Validators.required, Validators.minLength(5)]],
     description: ['', [Validators.required, Validators.minLength(10)]],
     status: ['SEND'],
-    details: this.fb.array<FormGroup>([
+    details: this.fb.array<FormGroup<{
+      description: FormControl,
+      amount: FormControl,
+      quantity: FormControl
+    }>>([
       this.fb.group({
-        description: ['', [Validators.required, Validators.minLength(5)]],
-        amount: ['', [Validators.required, Validators.min(0)]],
-        quantity: ['', [Validators.required, Validators.min(0)]],
+        description: ['Test', [Validators.required, Validators.minLength(5)]],
+        amount: [4500, [Validators.required, Validators.min(0)]],
+        quantity: [8, [Validators.required, Validators.min(0)]],
       })
     ])
   })
+
+  onAddDetails() {
+    this.details.push(this.fb.group({
+      description: ['', [Validators.required, Validators.minLength(5)]],
+      amount: ['', [Validators.required, Validators.min(0)]],
+      quantity: ['', [Validators.required, Validators.min(0)]],
+    }))
+  }
+
+  onRemoveDetails(index: number) {
+    this.details.removeAt(index);
+  }
 
   onSubmit() {
     console.log(this.invoiceForm.value);
