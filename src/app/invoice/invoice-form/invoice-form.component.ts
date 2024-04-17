@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { TInvoiceFormType } from './Invoice-form-type';
 
 @Component({
   selector: 'app-invoice-form',
@@ -31,7 +32,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 })
 export class InvoiceFormComponent implements OnInit {
 
-  invoiceForm = this.fb.group({
+  invoiceForm: TInvoiceFormType = this.fb.group({
     customer_name: ['', [Validators.required, Validators.minLength(5)]],
     description: ['', [Validators.required, Validators.minLength(10)]],
     status: ['SEND'],

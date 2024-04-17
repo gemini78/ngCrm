@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { TInvoiceFormType } from './Invoice-form-type';
 
 @Component({
   selector: 'app-invoice-form-details',
@@ -81,16 +82,7 @@ export class InvoiceFormDetailsComponent {
   detailsAddedEvent = new EventEmitter()
 
   @Input()
-  parent?: FormGroup<{
-    customer_name: FormControl;
-    description: FormControl;
-    status: FormControl;
-    details: FormArray<FormGroup<{
-      description: FormControl;
-      amount: FormControl;
-      quantity: FormControl;
-    }>>
-  }>;
+  parent?: TInvoiceFormType;
 
   get details() {
     return this.parent?.controls.details;

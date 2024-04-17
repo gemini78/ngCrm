@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { TInvoiceFormType } from './Invoice-form-type';
 
 @Component({
   selector: 'app-invoice-form-general',
@@ -49,16 +50,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 export class InvoiceFormGeneralComponent {
 
   @Input()
-  parent?: FormGroup<{
-    customer_name: FormControl;
-    description: FormControl;
-    status: FormControl;
-    details: FormArray<FormGroup<{
-      description: FormControl;
-      amount: FormControl;
-      quantity: FormControl;
-    }>>
-  }>;
+  parent?: TInvoiceFormType;
 
   get customerName() {
     return this.parent?.controls.customer_name;
