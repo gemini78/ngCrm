@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
     votre liste plus tard !
   </p>
 
-  <app-invoice-form></app-invoice-form>
+  <app-invoice-form (invoice-form)="onSubmit($event)" ></app-invoice-form>
 
 </div>
   `,
@@ -19,5 +19,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class InvoiceCreationComponent implements OnInit {
   ngOnInit(): void {
+  }
+
+  onSubmit(invoiceData: any) {
+    console.log(invoiceData);
   }
 }
