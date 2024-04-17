@@ -5,45 +5,8 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
   selector: 'app-invoice-form',
   template: `
     <form [formGroup]="invoiceForm" (submit)="onSubmit()">
-    <div class="row">
-      <div class="col">
-        <label for="description">Description</label>
-        <input
-          formControlName="description"
-          [class.is-invalid]="description.touched && description.invalid" 
-          [class.is-valid]="description.touched && description.valid" 
-          type="text"
-          id="description"
-          name="description"
-          placeholder="Description de la facture"
-          class="form-control mb-3"
-        />
-        <p class="invalid-feedback">La description est obligatoire et doit faire au moins 10 caracteres!!</p>
-      </div>
-      <div class="col">
-        <label for="customer_name">Client</label>
-        <input
-          formControlName="customer_name"
-          [class.is-invalid]= "customerName.touched && customerName.invalid"
-          [class.is-valid]= "customerName.touched && customerName.valid"
-          type="text"
-          id="customer_name"
-          name="customer_name"
-          placeholder="Nom du client / la société"
-          class="form-control mb-3"
-        />
-        <p class="invalid-feedback">Le client est obligatoire et doit faire au moins 5 caracteres!</p>
-      </div>
-      <div class="col">
-        <label for="status">Statut</label>
-        <select formControlName="status" name="status" id="status" class="form-control mb-3">
-          <option value="SENT">Envoyée</option>
-          <option value="PAID">Payée</option>
-          <option value="CANCELED">Annulée</option>
-        </select>
-      </div>
-    </div>
-
+    <app-invoice-form-general [parent]="invoiceForm"></app-invoice-form-general>
+    
     <hr />
 
     <h3>Détails de la facture</h3>
@@ -163,7 +126,7 @@ export class InvoiceFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.invoiceForm.valid);
+    console.log(this.invoiceForm.value);
   }
 
   constructor(private fb: FormBuilder) { }
