@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-invoice-creation',
@@ -154,6 +154,8 @@ export class InvoiceCreationComponent implements OnInit {
       amount: FormControl,
       quantity: FormControl
     }>>([])
+  }, {
+    validators: detailsExistsValidator
   })
 
   onAddDetails() {
@@ -169,7 +171,7 @@ export class InvoiceCreationComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.invoiceForm.value);
+    console.log(this.invoiceForm.valid);
   }
 
   constructor(private fb: FormBuilder) { }
@@ -206,4 +208,11 @@ export class InvoiceCreationComponent implements OnInit {
   get details() {
     return this.invoiceForm.controls.details;
   }
+}
+
+const detailsExistsValidator: ValidatorFn = (control: AbstractControl) => {
+  const details = control.get('details') as FormArray;
+  return details.length > 0 ? null : {
+    noDetails: true
+  };
 }
