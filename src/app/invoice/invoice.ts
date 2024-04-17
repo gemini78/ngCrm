@@ -8,6 +8,7 @@ export type TInvoiceStatus = 'PAID' | 'SENT' | 'CANCELED';
 export type TInvoicesDetail = TInvoiceDetail[]
 
 export type TInvoice = {
+    id?: number;
     customer_name: string;
     description: string;
     status: TInvoiceStatus;
