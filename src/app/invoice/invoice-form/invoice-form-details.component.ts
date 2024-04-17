@@ -73,7 +73,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
   styles: [
   ]
 })
-export class InvoiceFormDetailsComponent implements OnInit {
+export class InvoiceFormDetailsComponent {
   @Output('details-removed')
   detailsRemovedEvent = new EventEmitter<number>()
 
@@ -91,11 +91,6 @@ export class InvoiceFormDetailsComponent implements OnInit {
       quantity: FormControl;
     }>>
   }>;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
   get details() {
     return this.parent?.controls.details;

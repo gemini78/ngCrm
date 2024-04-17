@@ -19,19 +19,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 
     <hr />
 
-    <div class="row">
-      <div class="col-6 text-end">Total HT :</div>
-      <div class="col" id="total_ht">{{ total | currency: 'EUR':'symbol':undefined: 'fr'}}</div>
-    </div>
-
-    <div class="row">
-      <div class="col-6 text-end">Total TVA :</div>
-      <div class="col" id="total_tva">{{ totalTVA | currency: 'EUR':'symbol':undefined: 'fr'}}</div>
-    </div>
-    <div class="row fw-bold">
-      <div class="col-6 text-end">Total TTC :</div>
-      <div class="col" id="total_ttc">{{ totalTTC | currency: 'EUR':'symbol':undefined: 'fr'}}</div>
-    </div>
+    <app-invoice-form-totals [total]="total"></app-invoice-form-totals>
 
     <button class="mt-3 w-sm-auto btn btn-success" id="submit">
       Enregistrer
@@ -81,26 +69,6 @@ export class InvoiceFormComponent implements OnInit {
     return this.details.value.reduce((itemTotal: number, item) => {
       return itemTotal + (item.amount * item.quantity);
     }, 0)
-  }
-
-  get totalTVA(): number {
-    return this.total * 0.2;
-  }
-
-  get totalTTC(): number {
-    return (this.total + this.totalTVA);
-  }
-
-  get customerName() {
-    return this.invoiceForm.controls.customer_name;
-  }
-
-  get description() {
-    return this.invoiceForm.controls.description;
-  }
-
-  get status() {
-    return this.invoiceForm.controls.status;
   }
 
   get details() {

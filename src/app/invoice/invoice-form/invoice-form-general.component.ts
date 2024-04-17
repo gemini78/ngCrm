@@ -46,7 +46,7 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
   styles: [
   ]
 })
-export class InvoiceFormGeneralComponent implements OnInit {
+export class InvoiceFormGeneralComponent {
 
   @Input()
   parent?: FormGroup<{
@@ -59,11 +59,6 @@ export class InvoiceFormGeneralComponent implements OnInit {
       quantity: FormControl;
     }>>
   }>;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
   get customerName() {
     return this.parent?.controls.customer_name;
