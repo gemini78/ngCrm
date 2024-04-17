@@ -1,13 +1,28 @@
 import { HttpClient } from "@angular/common/http";
 import { TInvoice } from "./invoice";
 import { Injectable } from "@angular/core";
+import { AuthService } from "../auth/auth.service";
+import { pipe, switchMap, tap } from "rxjs";
 
 @Injectable()
 export class InvoiceService {
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient, private auth: AuthService) { }
 
     create(invoiceData: TInvoice) {
-        return this.http.post('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/invoice', invoiceData);
+        return this.auth.authToken.pipe(
+            tap(token => {
+                if (!token) {
+                    throw new Error('Unauthenticated')
+                }
+            }),
+            switchMap(token => {
+                return this.http.post<TInvoice>('https://x8ki-letl-twmt.n7.xano.io/api:BTcrjDR0/invoice', invoiceData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+            })
+        )
     }
 
     update(invoiceData: TInvoice) {

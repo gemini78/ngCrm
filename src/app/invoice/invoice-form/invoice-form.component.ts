@@ -36,14 +36,20 @@ export class InvoiceFormComponent implements OnInit {
   invoiceSubmitEvent = new EventEmitter<TInvoice>()
 
   invoiceForm: TInvoiceFormType = this.fb.group({
-    customer_name: ['', [Validators.required, Validators.minLength(5)]],
-    description: ['', [Validators.required, Validators.minLength(10)]],
-    status: ['SEND'],
+    customer_name: ['Adel ambitieux', [Validators.required, Validators.minLength(5)]],
+    description: ["Le Vinted d'Adel", [Validators.required, Validators.minLength(10)]],
+    status: ['SENT'],
     details: this.fb.array<FormGroup<{
       description: FormControl,
       amount: FormControl,
       quantity: FormControl
-    }>>([])
+    }>>([
+      this.fb.group({
+        amount: [300],
+        description: ['Journée de travail'],
+        quantity: [3]
+      })
+    ])
   }, {
     validators: detailsExistsValidator
   })

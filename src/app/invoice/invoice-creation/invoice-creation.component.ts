@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TInvoice } from '../invoice';
+import { InvoiceService } from '../invoice.service';
 
 @Component({
   selector: 'app-invoice-creation',
@@ -19,10 +20,17 @@ import { TInvoice } from '../invoice';
   ]
 })
 export class InvoiceCreationComponent implements OnInit {
+
+  constructor(private service: InvoiceService) { }
+
   ngOnInit(): void {
   }
 
   onSubmit(invoiceData: TInvoice) {
+    this.service.create(invoiceData).subscribe({
+      next: () => console.log(),
+      error: (error) => console.log(error)
+    })
     console.log(invoiceData);
   }
 }
