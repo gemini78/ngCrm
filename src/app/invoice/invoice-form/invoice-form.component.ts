@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TInvoiceFormType } from './Invoice-form-type';
+import { TInvoice, TInvoicesDetail } from '../invoice';
 
 @Component({
   selector: 'app-invoice-form',
@@ -32,7 +33,7 @@ import { TInvoiceFormType } from './Invoice-form-type';
 })
 export class InvoiceFormComponent implements OnInit {
   @Output('invoice-form')
-  invoiceSubmitEvent = new EventEmitter<any>()
+  invoiceSubmitEvent = new EventEmitter<TInvoice>()
 
   invoiceForm: TInvoiceFormType = this.fb.group({
     customer_name: ['', [Validators.required, Validators.minLength(5)]],
@@ -64,7 +65,8 @@ export class InvoiceFormComponent implements OnInit {
       return;
     }
 
-    this.invoiceSubmitEvent.emit(this.invoiceForm.value)
+    // We consider it to be an invoice
+    this.invoiceSubmitEvent.emit(this.invoiceForm.value as TInvoice)
   }
 
   constructor(private fb: FormBuilder) { }
