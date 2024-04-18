@@ -8,7 +8,12 @@ import { TInvoiceFormType } from './Invoice-form-type';
     <ng-container [formGroup]="parent" *ngIf="parent && details">
       <div class="alert bg-warning text-white" *ngIf="details.length===0">
         <p>Vous devez ajouter des détails à votre facture</p>
-        <button type="button" class="btn btn-sm btn-outline-light" (click)="detailsAddedEvent.emit()">
+        <button
+          type="button" 
+          class="btn btn-sm btn-outline-light" 
+          (click)="detailsAddedEvent.emit()"
+          id="initial-add-button"
+          >
           + Ajouter ma première ligne
         </button>
       </div>
@@ -57,6 +62,7 @@ import { TInvoiceFormType } from './Invoice-form-type';
             <div class="col-1">
               <button
                 type="button"
+                id="remove-button-{{i}}"
                 class="btn w-auto d-block btn-sm btn-danger"
                 (click)="detailsRemovedEvent.emit(i)"
               >
@@ -65,7 +71,12 @@ import { TInvoiceFormType } from './Invoice-form-type';
             </div>
           </div>
         </div>
-        <button *ngIf="details.length > 0" class="btn btn-primary btn-sm" type="button" (click)="detailsAddedEvent.emit()">
+        <button 
+          *ngIf="details.length > 0" 
+          class="btn btn-primary btn-sm"
+          type="button" (click)="detailsAddedEvent.emit()"
+          id="add-button"
+          >
           + Ajouter une ligne
         </button>
       </section>

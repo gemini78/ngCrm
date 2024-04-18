@@ -33,15 +33,16 @@ describe("InvoiceFormGeneralComponent", () => {
     it("should take into account input modifications", () => {
         fixture = TestBed.createComponent(TestHostComponent);
         fixture.detectChanges();
-        component = fixture.componentInstance;
         let inputDescription: HTMLInputElement = fixture.nativeElement.querySelector('#description');
         let inputCustomerName: HTMLInputElement = fixture.nativeElement.querySelector('#customer_name');
         let inputStatus: HTMLSelectElement = fixture.nativeElement.querySelector('#status');
+        component = fixture.componentInstance;
+
         //existing
         expect(inputDescription).toBeTruthy();
         expect(inputCustomerName).toBeTruthy();
         expect(inputStatus).toBeTruthy();
-        console.log(component);
+
         // values
         inputDescription.value = "MOCK_DESCRIPTION";
         inputDescription.dispatchEvent(new Event("input"));
