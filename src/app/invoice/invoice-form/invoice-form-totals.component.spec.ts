@@ -29,9 +29,6 @@ describe("InvoiceFormTotalsComponent", () => {
         let divTotalTVA: HTMLDivElement = fixture.nativeElement.querySelector('#total_tva');
         let divTotalTTC: HTMLDivElement = fixture.nativeElement.querySelector('#total_ttc');
         //console.log(divTotal);
-
-        console.log(divTotalTVA);
-
         //existing
         expect(divTotal).toBeTruthy();
         expect(divTotalTVA).toBeTruthy();
