@@ -9,7 +9,7 @@ const API_URL = environment.apiUrl;
 
 @Injectable()
 export class InvoiceService {
-    constructor(private http: HttpClient, private auth: AuthService) { }
+    constructor(private http: HttpClient) { }
 
     create(invoiceData: TInvoice) {
         return this.http.post<TInvoice>(API_URL + '/invoice', invoiceData)
