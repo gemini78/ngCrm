@@ -17,11 +17,11 @@ describe("InvoiceFormComponent", () => {
             declarations: [InvoiceFormComponent, InvoiceFormDetailsComponent, InvoiceFormGeneralComponent, InvoiceFormTotalsComponent],
             imports: [ReactiveFormsModule]
         }).compileComponents();
+        fixture = TestBed.createComponent(InvoiceFormComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     })
     it("should validate customer_name", () => {
-        fixture = TestBed.createComponent(InvoiceFormComponent);
-        fixture.detectChanges();
-        component = fixture.componentInstance;
         const field = component.invoiceForm.controls.customer_name;
         let customerInput: HTMLInputElement = fixture.nativeElement.querySelector('#customer_name');
         //existing
@@ -41,9 +41,6 @@ describe("InvoiceFormComponent", () => {
     })
 
     it("should validate description", () => {
-        fixture = TestBed.createComponent(InvoiceFormComponent);
-        fixture.detectChanges();
-        component = fixture.componentInstance;
         const field = component.invoiceForm.controls.description;
         let descriptionInput: HTMLInputElement = fixture.nativeElement.querySelector('#description');
         //existing
@@ -63,18 +60,12 @@ describe("InvoiceFormComponent", () => {
     });
 
     it("should validate that at least one detail item is given", () => {
-        fixture = TestBed.createComponent(InvoiceFormComponent);
-        fixture.detectChanges();
-        component = fixture.componentInstance;
         expect(component.invoiceForm.hasError('noDetails')).toBeTrue();
-
         component.onAddDetails();
         expect(component.invoiceForm.hasError('noDetails')).toBeFalse();
     })
 
     it("should validate details", () => {
-        fixture = TestBed.createComponent(InvoiceFormComponent);
-        component = fixture.componentInstance;
         component.onAddDetails();
         fixture.detectChanges();
 
@@ -133,8 +124,6 @@ describe("InvoiceFormComponent", () => {
     });
 
     it("should add a detail item when we call addDetails()", () => {
-        fixture = TestBed.createComponent(InvoiceFormComponent);
-        component = fixture.componentInstance;
         component.onAddDetails();
         fixture.detectChanges();
         expect(fixture.debugElement.queryAll(By.css('.detail-row')).length).toBe(1);
@@ -145,8 +134,6 @@ describe("InvoiceFormComponent", () => {
     });
 
     it("should remove a detail item when we call removeDetails()", () => {
-        fixture = TestBed.createComponent(InvoiceFormComponent);
-        component = fixture.componentInstance;
         component.onAddDetails(); // item 0
         component.onAddDetails(); // item 1
         fixture.detectChanges();
@@ -160,9 +147,6 @@ describe("InvoiceFormComponent", () => {
     });
 
     it("should listen to details events", () => {
-        fixture = TestBed.createComponent(InvoiceFormComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
         const initialAddButton: HTMLButtonElement = fixture.nativeElement.querySelector('#initial-add-button');
         //existing
         expect(initialAddButton).toBeTruthy();
@@ -179,9 +163,6 @@ describe("InvoiceFormComponent", () => {
     });
 
     it("should calculate total", () => {
-        fixture = TestBed.createComponent(InvoiceFormComponent);
-        component = fixture.componentInstance;
-        fixture.detectChanges();
         component.details.push(new FormGroup({
             amount: new FormControl(200),
             quantity: new FormControl(3),
@@ -222,20 +203,25 @@ class TestHostComponent {
 }
 
 describe("InvoiceFormComponent whith host", () => {
+    let fixture: ComponentFixture<TestHostComponent>;
+    let component: TestHostComponent;
+    let submitSpy: jasmine.Spy;
 
-    it("should emit an event on (invoice-form) if form is valid and user clicks submit button", async () => {
+    beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [TestHostComponent, InvoiceFormComponent, InvoiceFormGeneralComponent, InvoiceFormDetailsComponent, InvoiceFormTotalsComponent],
             imports: [ReactiveFormsModule]
         }).compileComponents();
 
-        const fixture = TestBed.createComponent(TestHostComponent);
+        fixture = TestBed.createComponent(TestHostComponent);
+        component = fixture.componentInstance;
         fixture.detectChanges();
-        const component = fixture.componentInstance;
-        const submitSpy = spyOn(component, "onSubmit");
+        submitSpy = spyOn(component, "onSubmit");
+    });
+
+    it("should emit an event on (invoice-form) if form is valid and user clicks submit button", async () => {
         let submitButton: HTMLButtonElement = fixture.nativeElement.querySelector('#submit');
         let initialAddButton: HTMLButtonElement = fixture.nativeElement.querySelector('#initial-add-button');
-
         let inputDescription: HTMLInputElement = fixture.nativeElement.querySelector('#description');
         let inputCustomerName: HTMLInputElement = fixture.nativeElement.querySelector('#customer_name');
         let inputStatus: HTMLSelectElement = fixture.nativeElement.querySelector('#status');
@@ -300,17 +286,7 @@ describe("InvoiceFormComponent whith host", () => {
     })
 
     it("should not emit an event on (invoice-form) if form is invalid and user clicks submit button", async () => {
-
         // BY DEFAULT THE FORM IS INVALID
-        await TestBed.configureTestingModule({
-            declarations: [TestHostComponent, InvoiceFormComponent, InvoiceFormGeneralComponent, InvoiceFormDetailsComponent, InvoiceFormTotalsComponent],
-            imports: [ReactiveFormsModule]
-        }).compileComponents();
-
-        const fixture = TestBed.createComponent(TestHostComponent);
-        fixture.detectChanges();
-        const component = fixture.componentInstance;
-        const submitSpy = spyOn(component, "onSubmit");
         let submitButton: HTMLButtonElement = fixture.nativeElement.querySelector('#submit');
         submitButton.click();
         fixture.detectChanges();
