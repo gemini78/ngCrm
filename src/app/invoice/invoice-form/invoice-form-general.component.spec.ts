@@ -2,7 +2,6 @@ import { Component, DebugElement, createComponent } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { InvoiceFormGeneralComponent } from "./invoice-form-general.component";
-import { By } from "@angular/platform-browser";
 
 @Component({
     selector: 'app-test',
@@ -26,7 +25,6 @@ describe("InvoiceFormGeneralComponent", () => {
             declarations: [TestHostComponent, InvoiceFormGeneralComponent],
             imports: [ReactiveFormsModule]
         }).compileComponents();
-
 
     })
 

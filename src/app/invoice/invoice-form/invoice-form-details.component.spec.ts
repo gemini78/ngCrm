@@ -112,7 +112,6 @@ describe("invoiceFormDetailsComponent", () => {
         //existing
         expect(addButton).toBeTruthy();
         addButton.click();
-        addButton.dispatchEvent(new Event("click"));
         expect(onAddSpy).toHaveBeenCalled();
     });
 
@@ -132,11 +131,9 @@ describe("invoiceFormDetailsComponent", () => {
         expect(removeButton0).toBeTruthy();
         expect(removeButton1).toBeTruthy();
         removeButton0.click();
-        removeButton0.dispatchEvent(new Event("click"));
         expect(onRemoveSpy).toHaveBeenCalledWith(0);
 
         removeButton1.click();
-        removeButton1.dispatchEvent(new Event("click"));
         expect(onRemoveSpy).toHaveBeenCalledWith(1);
     });
 
@@ -159,7 +156,6 @@ describe("invoiceFormDetailsComponent", () => {
         //existing
         expect(initialAddButton).toBeTruthy();
         initialAddButton.click();
-        initialAddButton.dispatchEvent(new Event("click"));
         expect(onAddSpy).toHaveBeenCalled();
     })
 })

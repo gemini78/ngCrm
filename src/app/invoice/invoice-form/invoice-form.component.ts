@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TInvoiceFormType } from './Invoice-form-type';
-import { TInvoice, TInvoicesDetail } from '../invoice';
+import { TInvoice } from '../invoice';
 
 @Component({
   selector: 'app-invoice-form',
@@ -36,20 +36,14 @@ export class InvoiceFormComponent implements OnInit {
   invoiceSubmitEvent = new EventEmitter<TInvoice>()
 
   invoiceForm: TInvoiceFormType = this.fb.group({
-    customer_name: ['Adel ambitieux', [Validators.required, Validators.minLength(5)]],
-    description: ["Le Vinted d'Adel", [Validators.required, Validators.minLength(10)]],
+    customer_name: ['', [Validators.required, Validators.minLength(5)]],
+    description: ['', [Validators.required, Validators.minLength(10)]],
     status: ['SENT'],
     details: this.fb.array<FormGroup<{
       description: FormControl,
       amount: FormControl,
       quantity: FormControl
-    }>>([
-      this.fb.group({
-        amount: [300],
-        description: ['Journée de travail'],
-        quantity: [3]
-      })
-    ])
+    }>>([])
   }, {
     validators: detailsExistsValidator
   })
