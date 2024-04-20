@@ -26,7 +26,7 @@ import { TInvoice } from '../invoice';
         <td>{{invoice.created_at | date : 'dd/MM/yyyy'}}</td>
         <td class="text-center">{{ invoice.total | currency: 'EUR':'symbol': undefined : 'fr' }}</td>
         <td class="text-center">
-          <span class="badge bg-success">{{invoice.status}}</span>
+          <app-invoice-status [status]="invoice.status"></app-invoice-status>
         </td>
         <td>
           <a routerLink="/invoices/{{invoice.id}}" class="btn btn-sm btn-primary">
