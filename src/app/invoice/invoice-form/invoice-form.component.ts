@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TInvoiceFormType } from './Invoice-form-type';
 import { TInvoice } from '../invoice';
@@ -33,7 +33,10 @@ import { TInvoice } from '../invoice';
 })
 export class InvoiceFormComponent implements OnInit {
   @Output('invoice-form')
-  invoiceSubmitEvent = new EventEmitter<TInvoice>()
+  invoiceSubmitEvent = new EventEmitter<TInvoice>();
+
+  @Input()
+  invoice?: TInvoice
 
   invoiceForm: TInvoiceFormType = this.fb.group({
     customer_name: ['', [Validators.required, Validators.minLength(5)]],
