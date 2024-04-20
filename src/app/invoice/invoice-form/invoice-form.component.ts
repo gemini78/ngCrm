@@ -75,6 +75,15 @@ export class InvoiceFormComponent implements OnInit {
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    if (!this.invoice) {
+      return;
+    }
+
+    this.invoice.details.forEach(item => {
+      this.onAddDetails();
+    })
+
+    this.invoiceForm.patchValue(this.invoice)
   }
 
   get total(): number {

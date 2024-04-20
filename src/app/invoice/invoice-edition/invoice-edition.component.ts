@@ -17,7 +17,7 @@ import { map, switchMap } from 'rxjs';
     {{errorMessage}}
   </p>
 
-  <app-invoice-form [invoice]=invoice (invoice-form)="onSubmit($event)" ></app-invoice-form>
+  <app-invoice-form *ngIf="invoice" [invoice]=invoice (invoice-form)="onSubmit($event)" ></app-invoice-form>
 
 </div>
   `,
