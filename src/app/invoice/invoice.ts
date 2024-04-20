@@ -9,6 +9,8 @@ export type TInvoicesDetail = TInvoiceDetail[]
 
 export type TInvoice = {
     id?: number;
+    created_at?: number;
+    total?: number;
     customer_name: string;
     description: string;
     status: TInvoiceStatus;

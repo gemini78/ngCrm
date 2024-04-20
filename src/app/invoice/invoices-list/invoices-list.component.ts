@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { InvoiceService } from '../invoice.service';
+import { TInvoice } from '../invoice';
 
 @Component({
   selector: 'app-invoices-list',
@@ -18,19 +20,19 @@ import { Component, OnInit } from '@angular/core';
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>Refonte du site web du restaurant</td>
-        <td>22/01/2022</td>
-        <td class="text-center">1 200,00 €</td>
+      <tr *ngFor="let invoice of invoices">
+        <td>{{invoice.id}}</td>
+        <td>{{invoice.description}}</td>
+        <td>{{invoice.created_at}}</td>
+        <td class="text-center">{{ invoice.total }}</td>
         <td class="text-center">
-          <span class="badge bg-success"> Payée </span>
+          <span class="badge bg-success">{{invoice.status}}</span>
         </td>
         <td>
-          <a routerLink="/invoices/1" class="btn btn-sm btn-primary">
+          <a routerLink="/invoices/{{invoice.id}}" class="btn btn-sm btn-primary">
             Modifier
           </a>
-          <button class="btn btn-sm ms-1 btn-danger">Supprimer</button>
+          <button (click)="onDelete(invoice.id!)" class="btn btn-sm ms-1 btn-danger">Supprimer</button>
         </td>
       </tr>
     </tbody>
@@ -41,10 +43,13 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class InvoicesListComponent implements OnInit {
+  invoices: TInvoice[] = [];
 
-  constructor() { }
+  constructor(private service: InvoiceService) { }
 
   ngOnInit(): void {
+    this.service.findAll().subscribe(invoices => { this.invoices = invoices })
   }
 
+  onDelete(id: number) { }
 }
