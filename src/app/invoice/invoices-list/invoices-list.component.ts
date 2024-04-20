@@ -23,8 +23,8 @@ import { TInvoice } from '../invoice';
       <tr *ngFor="let invoice of invoices">
         <td>{{invoice.id}}</td>
         <td>{{invoice.description}}</td>
-        <td>{{invoice.created_at}}</td>
-        <td class="text-center">{{ invoice.total }}</td>
+        <td>{{invoice.created_at | date : 'dd/MM/yyyy'}}</td>
+        <td class="text-center">{{ invoice.total | currency: 'EUR':'symbol': undefined : 'fr' }}</td>
         <td class="text-center">
           <span class="badge bg-success">{{invoice.status}}</span>
         </td>
