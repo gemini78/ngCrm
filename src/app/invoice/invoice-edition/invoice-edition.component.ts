@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TInvoice } from '../invoice';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceService } from '../invoice.service';
-import { map, switchMap } from 'rxjs';
+import { Observable, map, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-invoice-edition',
@@ -17,7 +17,7 @@ import { map, switchMap } from 'rxjs';
     {{errorMessage}}
   </p>
 
-  <app-invoice-form *ngIf="invoice" [invoice]=invoice (invoice-form)="onSubmit($event)" ></app-invoice-form>
+  <app-invoice-form *ngIf="invoice$ | async as invoice" [invoice]=invoice (invoice-form)="onSubmit($event)" ></app-invoice-form>
 
 </div>
   `,
@@ -26,17 +26,15 @@ import { map, switchMap } from 'rxjs';
 })
 export class InvoiceEditionComponent implements OnInit {
   errorMessage = '';
-  invoice?: TInvoice;
+  invoice$?: Observable<TInvoice>;
 
   constructor(private route: ActivatedRoute, private service: InvoiceService) { }
 
   ngOnInit(): void {
-    this.route.paramMap.pipe(
+    this.invoice$ = this.route.paramMap.pipe(
       map(paramMap => paramMap.get('id')),
       switchMap(id => this.service.find(+id!))
-    ).subscribe(invoice => {
-      this.invoice = invoice;
-    })
+    )
   }
   onSubmit(invoice: TInvoice) { }
 }
