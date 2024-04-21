@@ -41,6 +41,13 @@ describe("InvoiceService", () => {
             method: 'POST'
         });
 
-        expect(request.request.body).toEqual(datasInvoice);
+        expect(request.request.body).toEqual({
+            description: "MOCK_DESCRIPTION",
+            customer_name: "MOCK_CUSTOMER",
+            status: 'PAID',
+            details: [
+                { amount: 30000, quantity: 2, description: 'MOCK_DESCRIPTION' }
+            ]
+        });
     })
 })
