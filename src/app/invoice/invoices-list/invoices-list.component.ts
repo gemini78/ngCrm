@@ -7,6 +7,9 @@ import { TInvoice } from '../invoice';
   template: `
     <div class="bg-light p-3 rounded">
   <h1>Liste de vos factures</h1>
+  <div class="alert bg-danger" *ngIf="errorMessage">
+    {{errorMessage}}
+  </div>
   <hr />
   <table class="table table-hover">
     <thead>
@@ -44,6 +47,7 @@ import { TInvoice } from '../invoice';
 })
 export class InvoicesListComponent implements OnInit {
   invoices: TInvoice[] = [];
+  errorMessage = '';
 
   constructor(private service: InvoiceService) { }
 
@@ -51,5 +55,17 @@ export class InvoicesListComponent implements OnInit {
     this.service.findAll().subscribe(invoices => { this.invoices = invoices })
   }
 
-  onDelete(id: number) { }
+  onDelete(id: number) {
+    const oldInvoices = [...this.invoices];
+
+    this.invoices = this.invoices.filter(item => item.id !== id);
+
+    this.service.delete(id).subscribe({
+      next: () => { },
+      error: () => {
+        this.errorMessage = "Une erreur est survenue lors de la suppression de la facture";
+        this.invoices = oldInvoices;
+      }
+    });
+  }
 }
