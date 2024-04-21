@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InvoiceService } from '../invoice.service';
 import { TInvoice } from '../invoice';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-invoices-list',
@@ -48,11 +49,13 @@ import { TInvoice } from '../invoice';
 export class InvoicesListComponent implements OnInit {
   invoices: TInvoice[] = [];
   errorMessage = '';
+  deleteSub?: Subscription;
+  findAllSub?: Subscription;
 
   constructor(private service: InvoiceService) { }
 
   ngOnInit(): void {
-    this.service.findAll().subscribe(invoices => { this.invoices = invoices })
+    this.findAllSub = this.service.findAll().subscribe(invoices => { this.invoices = invoices })
   }
 
   onDelete(id: number) {
@@ -60,12 +63,17 @@ export class InvoicesListComponent implements OnInit {
 
     this.invoices = this.invoices.filter(item => item.id !== id);
 
-    this.service.delete(id).subscribe({
+    this.deleteSub = this.service.delete(id).subscribe({
       next: () => { },
       error: () => {
         this.errorMessage = "Une erreur est survenue lors de la suppression de la facture";
         this.invoices = oldInvoices;
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.findAllSub?.unsubscribe();
+    this.deleteSub?.unsubscribe();
   }
 }
