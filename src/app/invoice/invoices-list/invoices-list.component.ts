@@ -33,7 +33,7 @@ import { Subscription } from 'rxjs';
           <app-invoice-status [status]="invoice.status"></app-invoice-status>
         </td>
         <td>
-          <a routerLink="/invoices/{{invoice.id}}" class="btn btn-sm btn-primary">
+          <a [routerLink]="[invoice.id]" class="btn btn-sm btn-primary">
             Modifier
           </a>
           <button (click)="onDelete(invoice.id!)" class="btn btn-sm ms-1 btn-danger">Supprimer</button>

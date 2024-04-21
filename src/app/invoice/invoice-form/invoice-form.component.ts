@@ -78,6 +78,7 @@ export class InvoiceFormComponent implements OnInit {
     if (!this.invoice) {
       return;
     }
+    console.log(this.invoice);
 
     this.invoice.details.forEach(item => {
       this.onAddDetails();
