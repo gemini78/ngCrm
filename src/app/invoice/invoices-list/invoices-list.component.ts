@@ -55,7 +55,10 @@ export class InvoicesListComponent implements OnInit {
   constructor(private service: InvoiceService) { }
 
   ngOnInit(): void {
-    this.findAllSub = this.service.findAll().subscribe(invoices => { this.invoices = invoices })
+    this.findAllSub = this.service.findAll().subscribe({
+      next: (invoices) => this.invoices = invoices,
+      error: () => this.errorMessage = "Nous n'avons pas pu récuperer vos factures"
+    })
   }
 
   onDelete(id: number) {
