@@ -12,6 +12,7 @@ describe("InvoicesListComponent", () => {
     let fixture: ComponentFixture<InvoicesListComponent>;
     let component: InvoicesListComponent;
     let service: InvoiceService;
+    let spyFindAll: jasmine.Spy;
 
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
@@ -20,49 +21,23 @@ describe("InvoicesListComponent", () => {
             providers: [InvoiceService],
 
         }).compileComponents();
+
         fixture = TestBed.createComponent(InvoicesListComponent);
         component = fixture.componentInstance;
         service = TestBed.inject(InvoiceService);
-
+        spyFindAll = spyOn(service, "findAll");
 
     }));
 
     it("should display an error message if request fails", () => {
-        const spyFindAll = spyOn(service, "findAll");
         spyFindAll.and.returnValue(throwError(() => of(null)));
-
         fixture.detectChanges();
         const alertDiv: HTMLDivElement = fixture.nativeElement.querySelector('alert.bg-danger');
-
         expect(true).toBeTrue();
     })
 
     it("should display a list of invoices if request success", () => {
-        expect(true).toBeTrue();
-
-        const mockInvoices: any[] = [
-            {
-                id: 1,
-                description: "MOCK_DESCRIPTION",
-                customer_name: "MOCK_CUSTOMER",
-                status: "PAID",
-                total: 300,
-                created_at: Date.now(),
-                details: []
-            },
-            {
-                id: 2,
-                description: "MOCK_DESCRIPTION",
-                customer_name: "MOCK_CUSTOMER",
-                status: "PAID",
-                total: 500,
-                created_at: Date.now(),
-                details: []
-            },
-
-        ];
-        const spyFindAll = spyOn(service, "findAll");
-        spyFindAll.and.returnValue(of(mockInvoices));
+        spyFindAll.and.returnValue(of(getFakeInvoices()));
         fixture.detectChanges();
         const allTrs = fixture.debugElement.queryAll(By.css('tbody tr'));
         const oneTr: HTMLTableRowElement = fixture.nativeElement.querySelector('tbody tr');
@@ -71,29 +46,7 @@ describe("InvoicesListComponent", () => {
     });
 
     it("should delete an invoice if request succeeds", () => {
-        const mockInvoices: any[] = [
-            {
-                id: 1,
-                description: "MOCK_DESCRIPTION",
-                customer_name: "MOCK_CUSTOMER",
-                status: "PAID",
-                total: 300,
-                created_at: Date.now(),
-                details: []
-            },
-            {
-                id: 2,
-                description: "MOCK_DESCRIPTION",
-                customer_name: "MOCK_CUSTOMER",
-                status: "PAID",
-                total: 500,
-                created_at: Date.now(),
-                details: []
-            },
-
-        ];
-        const spyFindAll = spyOn(service, "findAll");
-        spyFindAll.and.returnValue(of(mockInvoices));
+        spyFindAll.and.returnValue(of(getFakeInvoices()));
 
         const spyDelete = spyOn(service, "delete");
         spyDelete.and.returnValue(of({}));
@@ -108,29 +61,7 @@ describe("InvoicesListComponent", () => {
     })
 
     it("should not delete an invoice if request fails", () => {
-        const mockInvoices: any[] = [
-            {
-                id: 1,
-                description: "MOCK_DESCRIPTION",
-                customer_name: "MOCK_CUSTOMER",
-                status: "PAID",
-                total: 300,
-                created_at: Date.now(),
-                details: []
-            },
-            {
-                id: 2,
-                description: "MOCK_DESCRIPTION",
-                customer_name: "MOCK_CUSTOMER",
-                status: "PAID",
-                total: 500,
-                created_at: Date.now(),
-                details: []
-            },
-
-        ];
-        const spyFindAll = spyOn(service, "findAll");
-        spyFindAll.and.returnValue(of(mockInvoices));
+        spyFindAll.and.returnValue(of(getFakeInvoices()));
 
         const spyDelete = spyOn(service, "delete");
         spyDelete.and.returnValue(throwError(() => of(null)));
@@ -145,3 +76,27 @@ describe("InvoicesListComponent", () => {
         expect(fixture.nativeElement.querySelector('.alert.bg-danger')).toBeDefined();
     })
 })
+
+const getFakeInvoices = () => {
+    return [
+        {
+            id: 1,
+            description: "MOCK_DESCRIPTION",
+            customer_name: "MOCK_CUSTOMER",
+            status: "PAID",
+            total: 300,
+            created_at: Date.now(),
+            details: []
+        },
+        {
+            id: 2,
+            description: "MOCK_DESCRIPTION",
+            customer_name: "MOCK_CUSTOMER",
+            status: "PAID",
+            total: 500,
+            created_at: Date.now(),
+            details: []
+        },
+
+    ] as any[]
+}
