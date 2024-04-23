@@ -5,8 +5,7 @@ import { RouterModule } from "@angular/router";
 import { InvoiceService } from "../invoice.service";
 import { RouterTestingModule } from "@angular/router/testing";
 import { HttpClientTestingModule } from "@angular/common/http/testing";
-import { BehaviorSubject, Observable, from, of, throwError } from "rxjs";
-import { TInvoice, TInvoiceStatus, TInvoicesDetail } from "../invoice";
+import { of, throwError } from "rxjs";
 import { By } from "@angular/platform-browser";
 
 describe("InvoicesListComponent", () => {
@@ -34,7 +33,6 @@ describe("InvoicesListComponent", () => {
 
         fixture.detectChanges();
         const alertDiv: HTMLDivElement = fixture.nativeElement.querySelector('alert.bg-danger');
-        console.log(alertDiv);
 
         expect(true).toBeTrue();
     })
@@ -70,7 +68,80 @@ describe("InvoicesListComponent", () => {
         const oneTr: HTMLTableRowElement = fixture.nativeElement.querySelector('tbody tr');
         expect(allTrs.length).toBe(2);
         expect(oneTr.innerHTML).toContain('300,00&nbsp;€');
+    });
 
+    it("should delete an invoice if request succeeds", () => {
+        const mockInvoices: any[] = [
+            {
+                id: 1,
+                description: "MOCK_DESCRIPTION",
+                customer_name: "MOCK_CUSTOMER",
+                status: "PAID",
+                total: 300,
+                created_at: Date.now(),
+                details: []
+            },
+            {
+                id: 2,
+                description: "MOCK_DESCRIPTION",
+                customer_name: "MOCK_CUSTOMER",
+                status: "PAID",
+                total: 500,
+                created_at: Date.now(),
+                details: []
+            },
+
+        ];
+        const spyFindAll = spyOn(service, "findAll");
+        spyFindAll.and.returnValue(of(mockInvoices));
+
+        const spyDelete = spyOn(service, "delete");
+        spyDelete.and.returnValue(of({}));
+
+        fixture.detectChanges();
+
+        let deleteButton1: HTMLButtonElement = fixture.nativeElement.querySelector('#delete-button-1');
+        deleteButton1.click();
+        fixture.detectChanges();
+        deleteButton1 = fixture.nativeElement.querySelector('#delete-button-1');
+        expect(deleteButton1).toBeNull();
     })
 
+    it("should not delete an invoice if request fails", () => {
+        const mockInvoices: any[] = [
+            {
+                id: 1,
+                description: "MOCK_DESCRIPTION",
+                customer_name: "MOCK_CUSTOMER",
+                status: "PAID",
+                total: 300,
+                created_at: Date.now(),
+                details: []
+            },
+            {
+                id: 2,
+                description: "MOCK_DESCRIPTION",
+                customer_name: "MOCK_CUSTOMER",
+                status: "PAID",
+                total: 500,
+                created_at: Date.now(),
+                details: []
+            },
+
+        ];
+        const spyFindAll = spyOn(service, "findAll");
+        spyFindAll.and.returnValue(of(mockInvoices));
+
+        const spyDelete = spyOn(service, "delete");
+        spyDelete.and.returnValue(throwError(() => of(null)));
+
+        fixture.detectChanges();
+
+        let deleteButton1: HTMLButtonElement = fixture.nativeElement.querySelector('#delete-button-1');
+        deleteButton1.click();
+        fixture.detectChanges();
+
+        expect(fixture.nativeElement.querySelector('#delete-button-1')).toBeDefined();
+        expect(fixture.nativeElement.querySelector('.alert.bg-danger')).toBeDefined();
+    })
 })

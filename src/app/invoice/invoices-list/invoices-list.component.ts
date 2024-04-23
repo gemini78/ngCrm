@@ -36,7 +36,7 @@ import { Subscription } from 'rxjs';
           <a [routerLink]="[invoice.id]" class="btn btn-sm btn-primary">
             Modifier
           </a>
-          <button (click)="onDelete(invoice.id!)" class="btn btn-sm ms-1 btn-danger">Supprimer</button>
+          <button id="delete-button-{{invoice.id}}" (click)="onDelete(invoice.id!)" class="btn btn-sm ms-1 btn-danger">Supprimer</button>
         </td>
       </tr>
     </tbody>
